@@ -1,0 +1,30 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+type Query {
+    source(id: ID @eq): Source @find(model: "App\\Models\\Source")
+    sources: [Source!]! @all
+
+    category(id: ID @eq): Category @find(model: "App\\Models\\Category")
+    categories: [Category!]! @all
+}
+
+type Source {
+    id: ID!,
+    name: String!,
+    prefix_url: String!,
+
+    products: [Product!]! @hasMany
+}
+
+type Category {
+    id: ID!,
+    name: String!,
+
+    products: [Product!]! @hasMany
+}
+
+#import product.graphql
