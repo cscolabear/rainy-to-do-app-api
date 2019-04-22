@@ -124,6 +124,7 @@ return [
     //
     'types' => [
         'SortOrderEnum' => App\GraphQL\Enums\SortOrderEnum::class,
+        'OrderByClauseInput' => App\GraphQL\InputObject\OrderByClauseInput::class,
 
         // 'user' => App\GraphQL\Type\UserType::class,
         'SourceType' => App\GraphQL\Type\SourceType::class,

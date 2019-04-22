@@ -56,6 +56,10 @@ class ProductType extends GraphQLType
             'category' => [
                 'type' => GraphQL::type('CategoryType'),
             ],
+
+            'order' => [
+                'type' => GraphQL::type('SortOrderEnum'),
+            ]
         ];
     }
 }
