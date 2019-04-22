@@ -1,10 +1,10 @@
 <?php
 
 
-use example\Mutation\ExampleMutation;
-use example\Query\ExampleQuery;
-use example\Type\ExampleRelationType;
-use example\Type\ExampleType;
+// use example\Mutation\ExampleMutation;
+// use example\Query\ExampleQuery;
+// use example\Type\ExampleRelationType;
+// use example\Type\ExampleType;
 
 return [
 
@@ -106,6 +106,7 @@ return [
                 // 'example_query' => ExampleQuery::class,
             ],
             'mutation' => [
+                'insertProducts' => \App\GraphQL\Mutation\InsertProductsMutation::class,
                 // 'example_mutation'  => ExampleMutation::class,
             ],
             'middleware' => [],
@@ -123,16 +124,20 @@ return [
     // ]
     //
     'types' => [
+        // enum
         'SortOrderEnum' => App\GraphQL\Enums\SortOrderEnum::class,
-        'OrderByClauseInput' => App\GraphQL\InputObject\OrderByClauseInput::class,
 
+        // input
+        'OrderByClauseInput' => App\GraphQL\InputObject\OrderByClauseInput::class,
+        'ProductInput' => App\GraphQL\InputObject\ProductInput::class,
+
+        // type
         // 'user' => App\GraphQL\Type\UserType::class,
         'SourceType' => App\GraphQL\Type\SourceType::class,
         'CategoryType' => App\GraphQL\Type\CategoryType::class,
         'ProductType' => App\GraphQL\Type\ProductType::class,
 
-        // 'example'           => ExampleType::class,
-        // 'relation_example'  => ExampleRelationType::class,
+        'InsertedType' => App\GraphQL\Type\InsertedType::class,
     ],
 
     // This callable will be passed the Error object for each errors GraphQL catch.
