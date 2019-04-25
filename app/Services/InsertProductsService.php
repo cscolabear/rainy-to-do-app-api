@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Models\Source;
 use App\Models\Category;
 use Illuminate\Support\Collection;
+use App\Repositories\ProductsRepository;
 
-class InsertProductsRepository
+class InsertProductsService
 {
     public function bulkInsert(Collection $input_data): Collection
     {
@@ -33,15 +34,8 @@ class InsertProductsRepository
     private function getOrCreateSource(Collection $source_data): Collection
     {
         $source_name_list = $source_data->keys()->all();
-        $exist_sources = $this->getExistSources($source_name_list);
+        $exist_sources = (new ProductsRepository)->getExistSources($source_name_list);
         return $this->mappingSourceData($source_data, $exist_sources);
-    }
-
-    private function getExistSources(array $source_name_list): array
-    {
-        return Source::whereIn('name', array_unique($source_name_list))
-            ->pluck('id', 'name')
-            ->all();
     }
 
     private function mappingSourceData(
@@ -51,7 +45,7 @@ class InsertProductsRepository
     {
         $insert_collection = collect();
         $source_data->transform(function ($item, $source_name) use ($exist_sources, $insert_collection) {
-            $id = $exist_sources[ $source_name] ?? null;
+            $id = $item['id'] ?? $exist_sources[$source_name] ?? null;
             $prefix_url = $item['prefix_url'] ?? $item;
 
             if (!$id) {
@@ -70,7 +64,7 @@ class InsertProductsRepository
         if ($insert_collection->count()) {
             Source::insert($insert_collection->all());
             $source_name_list = $insert_collection->pluck('name')->all();
-            $exist_sources = $this->getExistSources($source_name_list);
+            $exist_sources = (new ProductsRepository)->getExistSources($source_name_list);
             return $this->mappingSourceData($source_data, $exist_sources);
         }
 
@@ -80,15 +74,8 @@ class InsertProductsRepository
     private function getOrCreateCategory(Collection $category_data): Collection
     {
         $category_name_list = $category_data->keys()->all();
-        $exist_categories = $this->getExistCategories($category_name_list);
+        $exist_categories = (new ProductsRepository)->getExistCategories($category_name_list);
         return $this->mappingCreateData($category_data, $exist_categories);
-    }
-
-    private function getExistCategories(array $category_name_list): array
-    {
-        return Category::whereIn('name', array_unique($category_name_list))
-            ->pluck('id', 'name')
-            ->all();
     }
 
     private function mappingCreateData(
@@ -98,7 +85,7 @@ class InsertProductsRepository
     {
         $insert_collection = collect();
         $category_data->transform(function ($item, $category_name) use ($exist_categories, $insert_collection) {
-            $id = $exist_categories[$category_name] ?? null;
+            $id = $item['id'] ?? $exist_categories[$category_name] ?? null;
 
             if (!$id) {
                 $insert_collection->push([
@@ -114,8 +101,8 @@ class InsertProductsRepository
         if ($insert_collection->count()) {
             Category::insert($insert_collection->all());
             $category_name_list = $insert_collection->pluck('name')->all();
-            $exist_sources = $this->getExistSources($category_name_list);
-            return $this->mappingSourceData($category_data, $exist_sources);
+            $exist_sources = (new ProductsRepository)->getExistCategories($category_name_list);
+            return $this->mappingCreateData($category_data, $exist_sources);
         }
 
         return $category_data;
@@ -125,7 +112,7 @@ class InsertProductsRepository
     {
         $price = str_replace(',', '', $input_price);
         return ($price = preg_replace('/[^\-\d]*(\-?\d*).*/', '$1', $price))
-            ? (int) $price
+            ? (int)$price
             : 0;
     }
 }
