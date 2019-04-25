@@ -9,10 +9,10 @@ use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Rebing\GraphQL\Support\Mutation;
+use App\Services\InsertProductsService;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\SelectFields;
 use Rebing\GraphQL\Support\Facades\GraphQL;
-use App\Repositories\InsertProductsRepository;
 
 class InsertProductsMutation extends Mutation
 {
@@ -40,7 +40,7 @@ class InsertProductsMutation extends Mutation
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
         $input_collection = collect($args['data']);
-        $input_data = (new InsertProductsRepository)->bulkInsert($input_collection);
+        $input_data = (new InsertProductsService)->bulkInsert($input_collection);
 
         $total = ['before' => 0, 'after' => 0];
         DB::transaction(function () use ($input_data, &$total) {
