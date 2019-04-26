@@ -31,7 +31,7 @@ class ProductsQuery extends Query
             'title' => ['name' => 'title', 'type' => Type::String()],
             'price' => ['name' => 'price', 'type' => Type::int()],
 
-            'limit' => ['name' => 'limit', 'type' => Type::int()],
+            'count' => ['name' => 'count', 'type' => Type::int()],
             'page' => ['name' => 'page', 'type' => Type::int()],
 
             'order' => ['name' => 'order', 'type' => GraphQL::type('OrderByClauseInput')],
@@ -43,7 +43,7 @@ class ProductsQuery extends Query
         $select = $fields->getSelect();
         $with = $fields->getRelations();
         $page = $args['page'] ?? 1;
-        $limit = $args['limit'] ?? 5;
+        $count = $args['count'] ?? 5;
         $order_args = $args['order'] ?? [];
 
         $where = function ($query) use ($args) {
@@ -65,6 +65,6 @@ class ProductsQuery extends Query
                     $order_args['order'] ?? 'ASC'
                 );
             })
-            ->paginate($limit, ['*'], 'page', $page);
+            ->paginate($count, ['*'], 'page', $page);
     }
 }

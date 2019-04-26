@@ -2,11 +2,8 @@
 
 namespace App\GraphQL\Mutation;
 
-use App\Models\Source;
 use App\Models\Product;
-use App\Models\Category;
 use GraphQL\Type\Definition\Type;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Rebing\GraphQL\Support\Mutation;
 use App\Services\InsertProductsService;
@@ -16,10 +13,19 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class InsertProductsMutation extends Mutation
 {
+    protected $insert_products_service;
+
     protected $attributes = [
         'name' => 'InsertProductsMutation',
         'description' => 'A mutation'
     ];
+
+    public function __construct(InsertProductsService $service)
+    {
+        parent::__construct();
+
+        $this->insert_products_service = $service;
+    }
 
     public function type()
     {
@@ -40,7 +46,7 @@ class InsertProductsMutation extends Mutation
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
         $input_collection = collect($args['data']);
-        $input_data = (new InsertProductsService)->bulkInsert($input_collection);
+        $input_data = $this->insert_products_service->bulkInsert($input_collection);
 
         $total = ['before' => 0, 'after' => 0];
         DB::transaction(function () use ($input_data, &$total) {
