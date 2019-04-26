@@ -9,6 +9,13 @@ use App\Repositories\ProductsRepository;
 
 class InsertProductsService
 {
+    protected $products_repo;
+
+    public function __construct(ProductsRepository $repo)
+    {
+        $this->products_repo = $repo;
+    }
+
     public function bulkInsert(Collection $input_data): Collection
     {
         $source_data = $input_data->pluck('prefix_url', 'source');
@@ -27,6 +34,9 @@ class InsertProductsService
                 'link' => $input['link'],
                 'img' => $input['img'],
                 'price' => $this->getPurePrice($input['price']),
+
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
         });
     }
@@ -34,7 +44,7 @@ class InsertProductsService
     private function getOrCreateSource(Collection $source_data): Collection
     {
         $source_name_list = $source_data->keys()->all();
-        $exist_sources = (new ProductsRepository)->getExistSources($source_name_list);
+        $exist_sources = $this->products_repo->getExistSources($source_name_list);
         return $this->mappingSourceData($source_data, $exist_sources);
     }
 
@@ -64,7 +74,7 @@ class InsertProductsService
         if ($insert_collection->count()) {
             Source::insert($insert_collection->all());
             $source_name_list = $insert_collection->pluck('name')->all();
-            $exist_sources = (new ProductsRepository)->getExistSources($source_name_list);
+            $exist_sources = $this->products_repo->getExistSources($source_name_list);
             return $this->mappingSourceData($source_data, $exist_sources);
         }
 
@@ -74,7 +84,7 @@ class InsertProductsService
     private function getOrCreateCategory(Collection $category_data): Collection
     {
         $category_name_list = $category_data->keys()->all();
-        $exist_categories = (new ProductsRepository)->getExistCategories($category_name_list);
+        $exist_categories = $this->products_repo->getExistCategories($category_name_list);
         return $this->mappingCreateData($category_data, $exist_categories);
     }
 
@@ -101,7 +111,7 @@ class InsertProductsService
         if ($insert_collection->count()) {
             Category::insert($insert_collection->all());
             $category_name_list = $insert_collection->pluck('name')->all();
-            $exist_sources = (new ProductsRepository)->getExistCategories($category_name_list);
+            $exist_sources = $this->products_repo->getExistCategories($category_name_list);
             return $this->mappingCreateData($category_data, $exist_sources);
         }
 
