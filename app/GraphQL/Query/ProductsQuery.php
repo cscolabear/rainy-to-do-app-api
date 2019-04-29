@@ -34,7 +34,7 @@ class ProductsQuery extends Query
             'count' => ['name' => 'count', 'type' => Type::int()],
             'page' => ['name' => 'page', 'type' => Type::int()],
 
-            'order' => ['name' => 'order', 'type' => GraphQL::type('OrderByClauseInput')],
+            'orderBy' => ['name' => 'orderBy', 'type' => GraphQL::type('OrderByClauseInput')],
         ];
     }
 
@@ -44,7 +44,7 @@ class ProductsQuery extends Query
         $with = $fields->getRelations();
         $page = $args['page'] ?? 1;
         $count = $args['count'] ?? 5;
-        $order_args = $args['order'] ?? [];
+        $order_args = $args['orderBy'] ?? [];
 
         $where = function ($query) use ($args) {
             if (isset($args['id'])) {
