@@ -30,6 +30,7 @@ class ProductsQuery extends Query
 
             'title' => ['name' => 'title', 'type' => Type::String()],
             'price' => ['name' => 'price', 'type' => Type::int()],
+            'priceRange' => ['name' => 'priceRange', 'type' => GraphQL::type('PriceRangeByClauseInput')],
 
             'count' => ['name' => 'count', 'type' => Type::int()],
             'page' => ['name' => 'page', 'type' => Type::int()],
@@ -51,9 +52,15 @@ class ProductsQuery extends Query
                 $query->where('id', $args['id']);
             }
 
-            // if (isset($args['email'])) {
-            //     $query->where('email', $args['email']);
-            // }
+            if (isset($args['priceRange'])) {
+                if (isset($args['priceRange']['gte']) && isset($args['priceRange']['lte'])) {
+                    $query->whereBetween('price', [$args['priceRange']['gte'], $args['priceRange']['lte']]);
+                } elseif (isset($args['priceRange']['gte'])) {
+                    $query->where('price', '>=', $args['priceRange']['gte']);
+                } elseif (isset($args['priceRange']['lte'])) {
+                    $query->where('price', '<=', $args['priceRange']['lte']);
+                }
+            }
         };
 
         return Product::with(array_keys($with))
