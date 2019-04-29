@@ -72,6 +72,8 @@ class ProductsQuery extends Query
                     $order_args['order'] ?? 'ASC'
                 );
             })
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('id', 'DESC')
             ->paginate($count, ['*'], 'page', $page);
     }
 }
