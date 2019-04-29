@@ -129,6 +129,7 @@ return [
 
         // input
         'OrderByClauseInput' => App\GraphQL\InputObject\OrderByClauseInput::class,
+        'PriceRangeByClauseInput' => App\GraphQL\InputObject\PriceRangeByClauseInput::class,
         'ProductInput' => App\GraphQL\InputObject\ProductInput::class,
 
         // type
