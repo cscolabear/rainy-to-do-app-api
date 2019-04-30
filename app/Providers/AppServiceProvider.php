@@ -27,16 +27,5 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
 
-\DB::listen(function ($query) {
-    \Log::info(
-        json_encode([
-            $query->sql,
-            $query->bindings,
-            $query->time,
-
-        ])
-    );
-});
-
     }
 }
