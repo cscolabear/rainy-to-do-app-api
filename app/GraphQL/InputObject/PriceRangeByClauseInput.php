@@ -12,6 +12,7 @@ class PriceRangeByClauseInput extends GraphQLType
 
     protected $attributes = [
         'name' => 'PriceRangeByClauseInput',
+        'description' => '價格區間, >= [gte], [lte] <= ',
     ];
 
     public function fields()
@@ -19,11 +20,13 @@ class PriceRangeByClauseInput extends GraphQLType
         return [
             'gte' => [
                 'name' => 'gte',
+                'description' => '大於等於',
                 'type' => Type::int(),
                 'rules' => ['integer']
             ],
             'lte' => [
                 'name' => 'lte',
+                'description' => '小於等於',
                 'type' => Type::int(),
                 'rules' => ['integer']
             ],

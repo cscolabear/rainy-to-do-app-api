@@ -10,7 +10,7 @@ class SortOrderEnum extends GraphQLType
 
     protected $attributes = [
         'name' => 'SortOrderEnum',
-        'description' => 'order BY clause',
+        'description' => 'order BY clause, ASC=0~10, DESC=10~0',
         'values' => [
             'ASC' => 'ASC',
             'DESC' => 'DESC',

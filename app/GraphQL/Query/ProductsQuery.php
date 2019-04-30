@@ -13,7 +13,7 @@ class ProductsQuery extends Query
 {
     protected $attributes = [
         'name' => 'ProductsQuery',
-        'description' => 'A query'
+        'description' => '取得 product 列表'
     ];
 
     public function type()
@@ -32,7 +32,8 @@ class ProductsQuery extends Query
             'price' => ['name' => 'price', 'type' => Type::int()],
             'priceRange' => ['name' => 'priceRange', 'type' => GraphQL::type('PriceRangeByClauseInput')],
 
-            'count' => ['name' => 'count', 'type' => Type::int()],
+            'count' => ['name' => 'count', 'type' => Type::int(),
+                'description' => '每頁筆數'],
             'page' => ['name' => 'page', 'type' => Type::int()],
 
             'orderBy' => ['name' => 'orderBy', 'type' => GraphQL::type('OrderByClauseInput')],

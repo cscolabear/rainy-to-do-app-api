@@ -10,7 +10,7 @@ class InsertedType extends GraphQLType
 {
     protected $attributes = [
         'name' => 'InsertedType',
-        'description' => 'A type',
+        'description' => '批次插入回傳欄位',
     ];
 
     public function fields()
@@ -18,6 +18,7 @@ class InsertedType extends GraphQLType
         return [
             'affected_rows' => [
                 'type' => Type::nonNull(Type::int()),
+                'description' => '成功寫入筆數',
             ],
         ];
     }

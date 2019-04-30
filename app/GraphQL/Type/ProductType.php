@@ -11,7 +11,7 @@ class ProductType extends GraphQLType
 {
     protected $attributes = [
         'name' => 'ProductType',
-        'description' => 'A type',
+        'description' => 'product 欄位',
         'model' => Product::class,
     ];
 

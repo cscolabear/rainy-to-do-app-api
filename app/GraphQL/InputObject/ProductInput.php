@@ -12,6 +12,7 @@ class ProductInput extends GraphQLType
 
     protected $attributes = [
         'name' => 'ProductInput',
+        'description' => '批次插入可用欄位',
     ];
 
     public function fields()
@@ -19,14 +20,17 @@ class ProductInput extends GraphQLType
         return[
             'source' => [
                 'name' => 'source', 'type' => Type::nonNull(Type::string()),
+                'description' => 'product 來源，不存在則自動新增',
                 'rules' => ['required', 'between:4,12'],
             ],
             'prefix_url' => [
                 'name' => 'prefix_url', 'type' => Type::nonNull(Type::string()),
+                // 'description' => '',
                 'rules' => ['required', 'between:4,255'],
             ],
             'category' => [
                 'name' => 'category', 'type' => Type::nonNull(Type::string()),
+                'description' => 'product 分類，不存在則自動新增',
                 'rules' => ['required', 'between:4,12'],
             ],
             // 'source_id' => [

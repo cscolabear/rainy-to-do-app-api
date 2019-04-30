@@ -17,7 +17,7 @@ class InsertProductsMutation extends Mutation
 
     protected $attributes = [
         'name' => 'InsertProductsMutation',
-        'description' => 'A mutation'
+        'description' => '批次寫入 product'
     ];
 
     public function __construct(InsertProductsService $service)

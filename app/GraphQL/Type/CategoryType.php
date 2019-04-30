@@ -10,7 +10,7 @@ class CategoryType extends GraphQLType
 {
     protected $attributes = [
         'name' => 'CategoryType',
-        'description' => 'A type',
+        'description' => '分類欄位',
         'model' => Category::class,
     ];
 

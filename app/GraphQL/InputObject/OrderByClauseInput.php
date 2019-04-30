@@ -12,7 +12,7 @@ class OrderByClauseInput extends GraphQLType
 
     protected $attributes = [
         'name' => 'OrderByClause',
-        // 'description' => 'A review with a comment and a score (0 to 5)'
+        'description' => '指定排序規則'
     ];
 
     public function fields()
@@ -20,7 +20,7 @@ class OrderByClauseInput extends GraphQLType
         return [
             'field' => [
                 'name' => 'field',
-                // 'description' => 'A comment (250 max chars)',
+                'description' => '指定排序欄位, e.g. "price"',
                 'type' => Type::string(),
 
                 // You can define Laravel Validation here

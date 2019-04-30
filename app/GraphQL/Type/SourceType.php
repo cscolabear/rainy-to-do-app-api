@@ -10,7 +10,7 @@ class SourceType extends GraphQLType
 {
     protected $attributes = [
         'name' => 'SourceType',
-        'description' => 'A type',
+        'description' => '資料來源欄位',
         'model' => Source::class,
     ];
 
