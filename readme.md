@@ -1,65 +1,156 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# index
+- status
+  - ![travis-ci-master](https://travis-ci.org/cscolabear/rainy-to-do-app-api.svg?branch=master)
+- [PHP Requirement](#requirement)
+- [GraphQL Request Example](#graphql-request-example)
+  - [fetch data](#fetch-data)
+  - [batch insert](#batch-insert)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+---
 
-## About Laravel
+### Requirement
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+配合 https://github.com/pamcy/Rainy-To-Do-App 建立的 API
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+(API 介面使用 graphql - http://graphql.org/)
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+使用兩個不一樣的 Graphql 套件
+- 目前 master 套件為 https://github.com/rebing/graphql-laravel
 
-## Learning Laravel
+- branch: https://github.com/cscolabear/rainy-to-do-app-api/tree/nuwave/lighthouse
+  - https://github.com/nuwave/lighthouse
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+- client 端個人選用 https://github.com/f/graphql.js/
+  - 用什麼方式都可以，`建議用 post 把 graphql request string 送出`
+  - 目前 get, post 都是啟用狀態; config/graphql.php - schemas.method = ['get', 'post']
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+- dev playground
+  - 使用套件 `mll-lab/laravel-graphql-playground`
+  - 可以使用 `https://[domain]/graphql-playground` 進行測試
+  - ![graphql-playground](https://user-images.githubusercontent.com/4863629/56945400-a79f3100-6b59-11e9-98d2-b841ed2668fe.png)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
+### graphql request example
 
-## Contributing
+ - #### fetch data
+```graphql
+query {
+  products(
+    count: 2
+    # page: 2
+    orderBy: {
+      field: "price"
+      order: DESC
+    }
+  )
+  {
+    data {
+      id
+      title
+      price
+      source {
+        name
+      }
+      category {
+        name
+      }
+    }
+    total
+    per_page
+    last_page
+  }
+}
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+or http get request
+```http
+/graphql?query=query {products(count:2 orderBy:{field:"price" order:DESC}){data{id title price source{name} category{name}}total per_page last_page}}
+```
 
-## Security Vulnerabilities
+response
+```json
+{
+  "data": {
+    "products": {
+      "data": [
+        {
+          "id": 2,
+          "source_id": 1,
+          "title": "親子生態觀察 - 基隆八斗子潮境公園",
+          "description": "做為海島子民，我們應該從小多了解台灣美麗的海岸線地型，才會知道豐富生態有多麼的珍貴。趁著兒童連假，帶著孩子來到基隆八斗子潮境公園，探訪這裡都住了哪些可愛的居民？面臨艱困的生存環境，他們又有哪些厲害的本領呢？",
+          "price": 600,
+          "link": "/product/3196",
+          "img": "//d1f5je0f1yvok5.cloudfront.net/photo/n/g/f/ngfJsvXYDNfBjmByMVLULQ_o.jpg",
+          "created_at": "2019-04-30 03:14:15",
+          "source": {
+            "name": "niceday"
+          },
+          "category": {
+            "name": "愛上戶外"
+          }
+        },
+        {
+          "id": 4,
+          "source_id": 1,
+          "title": ": 多肉木器小品 : 禪風與森林綠意的結合",
+          "description": "與其他植物相較，厚實的多肉植物多了種樸拙穩重，透過溫潤的木器及生氣蓬勃的多肉植物，組合出溫暖人心的多肉小品。適合擺在窗邊，跟著多肉追逐陽光、感受微風，為生活點綴森林的氣息，送禮自用兩相宜！",
+          "price": 500,
+          "link": "/product/3729",
+          "img": "//d1f5je0f1yvok5.cloudfront.net/photo/G/d/K/GdKxV_6,AERcQs1883_HTQ_o.jpg",
+          "created_at": "2019-04-30 03:14:15",
+          "source": {
+            "name": "niceday"
+          },
+          "category": {
+            "name": "藝文手作"
+          }
+        }
+      ],
+      "total": 5,
+      "per_page": 3,
+      "last_page": 2
+    }
+  }
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+ - #### batch insert
+```graphql
+mutation {
+  insertProducts(
+    data: [
+      {
+      	source: "niceday"
+        prefix_url: "//play.niceday.tw"
+      	category: "愛上戶外"
+      	title: "title 123"
+      	description: "desc 123"
+      	link: "cola.io/1234"
+      	img: "//cola.io/abc.jpg"
+      	price: "$ 1,234 起"
+      }
+    ]
+  ) {
+    affected_rows
+  }
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+or http get request
+```http
+/graphql?query=mutation{insertProducts(data:[{source:"niceday" prefix_url:"//play.niceday.tw" category:"愛上戶外" title:"title 123" description:"desc 123" link:"cola.io/1234" img: "//cola.io/abc.jpg" price:"$ 1,234 起"}]){affected_rows}}
+```
+
+response
+```json
+{
+  "data": {
+    "insertProducts": {
+      "affected_rows": 1
+    }
+  }
+}
+```
