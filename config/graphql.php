@@ -102,6 +102,8 @@ return [
             'query' => [
                 // 'users' => App\GraphQL\Query\UsersQuery::class,
                 'products' => App\GraphQL\Query\ProductsQuery::class,
+                'categories' => App\GraphQL\Query\CategoriesQuery::class,
+                'sources' => App\GraphQL\Query\SourcesQuery::class,
 
                 // 'example_query' => ExampleQuery::class,
             ],
