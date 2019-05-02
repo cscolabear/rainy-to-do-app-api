@@ -3,6 +3,7 @@
 namespace App\GraphQL\Query;
 
 use App\Models\Product;
+use App\Services\ProductsService;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Query;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -11,6 +12,15 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class ProductsQuery extends Query
 {
+    private $products_service;
+
+    public function __construct(ProductsService $service)
+    {
+        parent::__construct();
+
+        $this->products_service = $service;
+    }
+
     protected $attributes = [
         'name' => 'ProductsQuery',
         'description' => '取得 product 列表'
@@ -24,6 +34,7 @@ class ProductsQuery extends Query
     public function args()
     {
         return [
+            // field
             'id' => ['name' => 'id', 'type' => Type::int()],
             'source_id' => ['name' => 'source_id', 'type' => Type::int()],
             'category_id' => ['name' => 'category_id', 'type' => Type::int()],
@@ -32,49 +43,20 @@ class ProductsQuery extends Query
             'price' => ['name' => 'price', 'type' => Type::int()],
             'priceRange' => ['name' => 'priceRange', 'type' => GraphQL::type('PriceRangeByClauseInput')],
 
+            // pagination
             'count' => ['name' => 'count', 'type' => Type::int(),
                 'description' => '每頁筆數'],
             'page' => ['name' => 'page', 'type' => Type::int()],
 
+            // filter
+            'source_id' => ['name' => 'source_id', 'type' => Type::int()],
+            'category_ids' => ['name' => 'category_ids', 'type' => Type::listOf(Type::int())],
             'orderBy' => ['name' => 'orderBy', 'type' => GraphQL::type('OrderByClauseInput')],
         ];
     }
 
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-        $page = $args['page'] ?? 1;
-        $count = $args['count'] ?? 5;
-        $order_args = $args['orderBy'] ?? [];
-
-        $where = function ($query) use ($args) {
-            if (isset($args['id'])) {
-                $query->where('id', $args['id']);
-            }
-
-            if (isset($args['priceRange'])) {
-                if (isset($args['priceRange']['gte']) && isset($args['priceRange']['lte'])) {
-                    $query->whereBetween('price', [$args['priceRange']['gte'], $args['priceRange']['lte']]);
-                } elseif (isset($args['priceRange']['gte'])) {
-                    $query->where('price', '>=', $args['priceRange']['gte']);
-                } elseif (isset($args['priceRange']['lte'])) {
-                    $query->where('price', '<=', $args['priceRange']['lte']);
-                }
-            }
-        };
-
-        return Product::with(array_keys($with))
-            ->where($where)
-            ->select($select)
-            ->when(! empty($order_args), function($query) use ($order_args) {
-                return $query->orderBy(
-                    $order_args['field'],
-                    $order_args['order'] ?? 'ASC'
-                );
-            })
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('id', 'DESC')
-            ->paginate($count, ['*'], 'page', $page);
+        return $this->products_service->resolve($args, $fields);
     }
 }

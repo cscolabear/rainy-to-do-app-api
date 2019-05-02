@@ -35,13 +35,19 @@ class ProductsQueryTest extends TestCase
      */
     public function testProducts()
     {
-        $count = 2;
+        $count = 3;
 
         $query = sprintf( '
             query {
                 products (
                     count: %d
-                    page: 2
+                    page: 1
+                    source_id: 1
+                    category_ids: [
+                        2
+                        3
+                        4
+                    ]
                     orderBy: {
                         field: "price"
                         order: DESC
@@ -50,6 +56,7 @@ class ProductsQueryTest extends TestCase
                     data {
                         id
                         source_id
+                        category_id
                         title
                         description
                         price
@@ -68,8 +75,8 @@ class ProductsQueryTest extends TestCase
         $response = $this->graphql($query);
         $response->assertStatus(200)
             ->assertJsonCount($count, 'data.products.data.*')
-            ->assertJsonFragment(['last_page' => round(5/$count)])
-            ->assertJsonFragment(['total' => 5]) // from seed
+            ->assertJsonFragment(['current_page' => 1])
+            ->assertJsonFragment(['per_page' => $count])
             ->assertJsonStructure([
                 'data' => [
                     'products' => [
@@ -89,6 +96,17 @@ class ProductsQueryTest extends TestCase
                         'per_page',
                         'current_page',
                         'last_page',
+                    ],
+                ],
+            ])->assertJson([
+                'data' => [
+                    'products' => [
+                        'data' => [
+                            [
+                                'source_id' => 1,
+                                'category_id' => 4,
+                            ],
+                        ],
                     ],
                 ],
             ]);
