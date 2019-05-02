@@ -6,7 +6,6 @@ use Mockery;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\Product;
 
 class InsertProductsServiceTest extends TestCase
 {
@@ -31,7 +30,7 @@ class InsertProductsServiceTest extends TestCase
     /**
      * @return void
      */
-    public function testBulkInsertProductsService()
+    public function testProductsServiceBulkInsert()
     {
         $this->service_mock
             ->shouldReceive('bulkInsert')

@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductsQueryTest extends TestCase
 {
+    public $count = 3;
+
     public function setUp()
     {
         parent::setUp();
@@ -29,15 +31,9 @@ class ProductsQueryTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     * test product query and pagination
-     * @return void
-     */
-    public function testProducts()
+    public function getQueryString(): string
     {
-        $count = 3;
-
-        $query = sprintf( '
+        return sprintf('
             query {
                 products (
                     count: %d
@@ -70,13 +66,20 @@ class ProductsQueryTest extends TestCase
                     last_page
                 }
             }
-        ', $count);
+        ', $this->count);
+    }
 
-        $response = $this->graphql($query);
+    /**
+     * test product query and pagination
+     * @return void
+     */
+    public function testProducts()
+    {
+        $response = $this->graphql($this->getQueryString());
         $response->assertStatus(200)
-            ->assertJsonCount($count, 'data.products.data.*')
+            ->assertJsonCount($this->count, 'data.products.data.*')
             ->assertJsonFragment(['current_page' => 1])
-            ->assertJsonFragment(['per_page' => $count])
+            ->assertJsonFragment(['per_page' => $this->count])
             ->assertJsonStructure([
                 'data' => [
                     'products' => [
