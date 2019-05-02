@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Entities\QueryArgumentEntity;
 use App\Repositories\ProductsRepository;
-use Rebing\GraphQL\Support\SelectFields;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductsService
@@ -16,12 +15,19 @@ class ProductsService
         $this->products_repository = $repo;
     }
 
-    public function resolve(array $args, SelectFields $fields): LengthAwarePaginator
+    public function resolve(
+        array $args,
+        array $select_fields,
+        array $with_relations
+
+    ): LengthAwarePaginator
     {
-        return $this->products_repository->resolve(
-            $this->defaultArguments($args),
-            $fields
-        );
+        return $this->products_repository
+            ->resolve(
+                $this->defaultArguments($args),
+                $select_fields,
+                $with_relations
+            );
     }
 
     private function defaultArguments(array $args): array

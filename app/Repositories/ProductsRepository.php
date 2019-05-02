@@ -6,20 +6,22 @@ use App\Models\Source;
 use App\Models\Product;
 use App\Models\Category;
 use App\Entities\QueryArgumentEntity;
-use Rebing\GraphQL\Support\SelectFields;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductsRepository
 {
-    public function resolve(array $args, SelectFields $fields): LengthAwarePaginator
+    public function resolve(
+        array $args,
+        array $select_fields,
+        array $with_relations
+    ): LengthAwarePaginator
     {
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
+
         $where = $this->resolveClosureWhere($args);
 
-        return Product::with(array_keys($with))
+        return Product::with(array_keys($with_relations))
             ->where($where)
-            ->select($select)
+            ->select($select_fields)
             ->when(
                 !empty($args['orderBy']),
                 $this->resolveClosurePriceOrder($args)

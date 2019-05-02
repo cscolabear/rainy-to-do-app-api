@@ -57,6 +57,10 @@ class ProductsQuery extends Query
 
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
-        return $this->products_service->resolve($args, $fields);
+        $select_fields = $fields->getSelect();
+        $with_relations = $fields->getRelations();
+
+        return $this->products_service
+            ->resolve($args, $select_fields, $with_relations);
     }
 }
