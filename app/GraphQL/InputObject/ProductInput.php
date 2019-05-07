@@ -47,7 +47,7 @@ class ProductInput extends GraphQLType
             ],
             'description' => [
                 'name' => 'description', 'type' => Type::string(),
-                'rules' =>['between:5,250'],
+                'rules' =>[],
             ],
             'link' => [
                 'name' => 'link', 'type' => Type::nonNull(Type::string()),
