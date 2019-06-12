@@ -30,4 +30,15 @@
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="MAIL_DRIVER" value="array"/>
     </php>
+
+    <logging>
+        <log type="coverage-html" target="./tests/report" lowUpperBound="35"
+            highLowerBound="70"/>
+        <log type="coverage-clover" target="./tests/report/coverage.xml"/>
+        <log type="coverage-php" target="./tests/report/coverage.serialized"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+        <log type="junit" target="./tests/report/logfile.xml"/>
+        <log type="testdox-html" target="./tests/report/testdox.html"/>
+        <log type="testdox-text" target="./tests/report/testdox.txt"/>
+    </logging>
 </phpunit>
