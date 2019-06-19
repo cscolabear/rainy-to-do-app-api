@@ -26,7 +26,7 @@
 
 - dev playground
   - 使用套件 `mll-lab/laravel-graphql-playground`
-  - 可以使用 `https://[domain]/graphql-playground` 進行測試
+  - 可以使用 `https://[domain]/graphql-playground` 進行測試 (https://workxplay.net/rtd-app/graphql-playground)
   - ![graphql-playground](https://user-images.githubusercontent.com/4863629/56945400-a79f3100-6b59-11e9-98d2-b841ed2668fe.png)
 
 ---
