@@ -12,5 +12,10 @@ notifications:
       - cscolabear+travis-org@gmail.com
     on_success: change
     on_failure: always
+  slack:
+    rooms:
+      secure: KVvN9y/T8qmslFFL9s0IGSlsPHJLxohGDheX/jD7h5jVwfn7uzUOCNC3UdFanjgDJ8gLWImrbQpYHK1e85heFOnDR8YKGFDKrAEMejE1QdB9C5/1BHy3arZ9kYltc1BUmYx26j9VJNTlygvYd/+ggLsOsyHWjUAn6u3vC5/KzeSOY7yR9LdvE79THHXHMb9dD9kHUTMiqRu3kpe9+yqmx1+1f9kBtmoEhQkQRLJmMfLc4FELwjapsrWcBy8wsMyh78oJzNLicySnyLXkfZdoOzUZJXVaPxkj6WpVu2mBxLi9bhIaoBrTT64e5k6bCA901Yf1zxVcJEouYe8PDrlPjWB0IdedgTGRFtocF5z35y4pH07rNJ9fL10AMR+6DOPp6Tf0fHMDBbSn9aR/4orzevd7ssm1G9orP2rb/C7WfOYAMCO9B0EV0o1O+vHyHbS5ZYVQFy9GSO+/XzLttwM4xkjk8z7W9T3Kf2/1N1TJ6opZQH8Du4oScU8Pe3Fqm5VC811wZjOoh44gBKJlnOPfQVWTMVOanyvwjJQyzFHhe0s+wg5umdb4QvJfc3j7TirPnCyaD/RsrDrlkDWcfg1Dh8+OvTVSS8Wt4ED9b13E5+og2DDeu05aucuWQLjvJ+WH3pl4m+xajIsbidWCeNbGY9dK/ZcGgbGC8ogVwX9ENRY=
+    on_success: change
+    on_failure: always
 
 script: vendor/bin/phpunit -c phpunit.xml --coverage-text
