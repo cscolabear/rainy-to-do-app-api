@@ -8,6 +8,15 @@
 
 ---
 
+### install
+
+```bash
+$ composer install
+$ php artisan migrate --seed
+```
+
+---
+
 ### Requirement
 
 配合 https://github.com/pamcy/Rainy-To-Do-App 建立的 API
@@ -30,7 +39,6 @@
   - ![graphql-playground](https://user-images.githubusercontent.com/4863629/56945400-a79f3100-6b59-11e9-98d2-b841ed2668fe.png)
 
 ---
-
 
 ### graphql request example
 
