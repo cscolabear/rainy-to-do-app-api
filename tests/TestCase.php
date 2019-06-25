@@ -12,14 +12,15 @@ abstract class TestCase extends BaseTestCase
 
     protected function initDatabase()
     {
-        config([
-            'database.default' => 'sqlite',
-            'database.connections.sqlite' => [
-                'driver'    => 'sqlite',
-                'database'  => ':memory:',
-                'prefix'    => '',
-            ],
-        ]);
+        // move to phpunit.xml
+        // config([
+        //     'database.default' => 'sqlite',
+        //     'database.connections.sqlite' => [
+        //         'driver'    => 'sqlite',
+        //         'database'  => ':memory:',
+        //         'prefix'    => '',
+        //     ],
+        // ]);
 
 
         Artisan::call('migrate');
