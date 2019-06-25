@@ -34,6 +34,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        \Log::info('in@@@');
         parent::report($exception);
     }
 
@@ -46,6 +47,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        \Log::info('aaain@@@');
         return parent::render($request, $exception);
     }
 }
